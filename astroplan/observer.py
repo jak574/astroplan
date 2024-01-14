@@ -4,6 +4,7 @@ from __future__ import (absolute_import, division, print_function,
 
 # Standard library
 import sys
+import datetime
 import warnings
 # Third-party
 from astropy.coordinates import (EarthLocation, SkyCoord, AltAz,
