@@ -16,7 +16,7 @@ import warnings
 # Third-party
 from astropy.time import Time
 import astropy.units as u
-from astropy.coordinates import get_body, get_sun, Galactic, SkyCoord
+from astropy.coordinates import Galactic, SkyCoord
 from astropy import table
 
 import numpy as np
@@ -471,7 +471,7 @@ class AtNightConstraint(Constraint):
                     observer.pressure = 0
 
                 # find solar altitude at these times
-                altaz = observer.altaz(times, get_sun(times))
+                altaz = observer.altaz(times, observer.get_body('sun', times))
                 altitude = altaz.alt
                 # cache the altitude
                 observer._altaz_cache[aakey] = dict(times=times,
@@ -549,7 +549,7 @@ class SunSeparationConstraint(Constraint):
         # centred frame, so the separation is as-seen
         # by the observer.
         # 'get_sun' returns ICRS coords.
-        sun = get_body('sun', times, location=observer.location)
+        sun = observer.get_body('sun', times)
         targets = get_skycoord(targets)
         solar_separation = sun.separation(targets)
 
@@ -591,7 +591,7 @@ class MoonSeparationConstraint(Constraint):
         self.ephemeris = ephemeris
 
     def compute_constraint(self, times, observer, targets):
-        moon = get_body("moon", times, location=observer.location, ephemeris=self.ephemeris)
+        moon = observer.get_body("moon", times, ephemeris=self.ephemeris)
         # note to future editors - the order matters here
         # moon.separation(targets) is NOT the same as targets.separation(moon)
         # the former calculates the separation in the frame of the moon coord
