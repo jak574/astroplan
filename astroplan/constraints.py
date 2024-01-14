@@ -29,6 +29,7 @@ from .target import get_skycoord
 from .exceptions import MissingConstraintWarning
 from .observer import _make_cache_key
 
+
 __all__ = ["AltitudeConstraint", "AirmassConstraint", "AtNightConstraint",
            "is_observable", "is_always_observable", "time_grid_from_range",
            "GalacticLatitudeConstraint", "SunSeparationConstraint",
