@@ -1,11 +1,9 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-from six import string_types
 
 # Standard library
 import sys
-import datetime
 import warnings
 # Third-party
 from astropy.coordinates import (EarthLocation, SkyCoord, AltAz,
@@ -19,8 +17,9 @@ import pytz
 # Package
 from .exceptions import TargetNeverUpWarning, TargetAlwaysUpWarning
 from .moon import moon_illumination, moon_phase_angle
-from .target import get_skycoord, SunFlag, MoonFlag
 from .observer import _make_cache_key
+from .target import MoonFlag, SunFlag, get_skycoord
+
 
 __all__ = ["Observer"]
 
