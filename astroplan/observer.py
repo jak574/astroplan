@@ -19,13 +19,53 @@ import pytz
 # Package
 from .exceptions import TargetNeverUpWarning, TargetAlwaysUpWarning
 from .moon import moon_illumination, moon_phase_angle
-from .observer import _make_cache_key
 from .target import get_skycoord, SunFlag, MoonFlag
 
 
 __all__ = ["Observer"]
 
 MAGIC_TIME = Time(-999, format='jd')
+
+
+def _make_cache_key(times, targets):
+    """
+    Make a unique key to reference this combination of ``times`` and ``targets``.
+
+    Often, we wish to store expensive calculations for a combination of
+    ``targets`` and ``times`` in a cache on an ``observer``` object. This
+    routine will provide an appropriate, hashable, key to store these
+    calculations in a dictionary.
+
+    Parameters
+    ----------
+    times : `~astropy.time.Time`
+        Array of times on which to test the constraint.
+    targets : `~astropy.coordinates.SkyCoord`
+        Target or list of targets.
+
+    Returns
+    -------
+    cache_key : tuple
+        A hashable tuple for use as a cache key
+    """
+    # make a tuple from times
+    try:
+        timekey = tuple(times.jd) + times.shape
+    except BaseException:        # must be scalar
+        timekey = (times.jd,)
+    # make hashable thing from targets coords
+    try:
+        if hasattr(targets, 'frame'):
+            # treat as a SkyCoord object. Accessing the longitude
+            # attribute of the frame data should be unique and is
+            # quicker than accessing the ra attribute.
+            targkey = tuple(targets.frame.data.lon.value.ravel()) + targets.shape
+        else:
+            # assume targets is a string.
+            targkey = (targets,)
+    except BaseException:
+        targkey = (targets.frame.data.lon,)
+    return timekey + targkey
 
 
 # Handle deprecated MAGIC_TIME variable

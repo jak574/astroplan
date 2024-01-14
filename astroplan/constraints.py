@@ -27,6 +27,7 @@ from .moon import moon_illumination
 from .utils import time_grid_from_range
 from .target import get_skycoord
 from .exceptions import MissingConstraintWarning
+from .observer import _make_cache_key
 
 __all__ = ["AltitudeConstraint", "AirmassConstraint", "AtNightConstraint",
            "is_observable", "is_always_observable", "time_grid_from_range",
@@ -42,47 +43,6 @@ _current_year_time_range = Time(  # needed for backward compatibility
     [str(_current_year) + '-01-01',
      str(_current_year) + '-12-31']
 )
-
-
-def _make_cache_key(times, targets):
-    """
-    Make a unique key to reference this combination of ``times`` and ``targets``.
-
-    Often, we wish to store expensive calculations for a combination of
-    ``targets`` and ``times`` in a cache on an ``observer``` object. This
-    routine will provide an appropriate, hashable, key to store these
-    calculations in a dictionary.
-
-    Parameters
-    ----------
-    times : `~astropy.time.Time`
-        Array of times on which to test the constraint.
-    targets : `~astropy.coordinates.SkyCoord`
-        Target or list of targets.
-
-    Returns
-    -------
-    cache_key : tuple
-        A hashable tuple for use as a cache key
-    """
-    # make a tuple from times
-    try:
-        timekey = tuple(times.jd) + times.shape
-    except BaseException:        # must be scalar
-        timekey = (times.jd,)
-    # make hashable thing from targets coords
-    try:
-        if hasattr(targets, 'frame'):
-            # treat as a SkyCoord object. Accessing the longitude
-            # attribute of the frame data should be unique and is
-            # quicker than accessing the ra attribute.
-            targkey = tuple(targets.frame.data.lon.value.ravel()) + targets.shape
-        else:
-            # assume targets is a string.
-            targkey = (targets,)
-    except BaseException:
-        targkey = (targets.frame.data.lon,)
-    return timekey + targkey
 
 
 def _get_altaz(times, observer, targets, force_zero_pressure=False):
