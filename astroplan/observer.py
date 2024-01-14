@@ -607,7 +607,7 @@ class Observer(object):
         >>> from astropy.coordinates import SkyCoord
         >>> apo = Observer.at_site("APO")
         >>> time = Time('2001-02-03 04:05:06')
-        >>> target = apo.get_body('sun', time)
+        >>> target = apo.get_body("sun", time)
         """
         if not isinstance(time, Time):
             time = Time(time)
@@ -687,7 +687,7 @@ class Observer(object):
             if target is MoonFlag:
                 target = self.get_body("moon", time)
             elif target is SunFlag:
-                target = self.get_body('sun', time)
+                target = self.get_body("sun", time)
 
             time, target = self._preprocess_inputs(time, target, grid_times_targets)
 
@@ -1440,7 +1440,7 @@ class Observer(object):
         >>> print("ISO: {0.iso}, JD: {0.jd}".format(sun_rise)) # doctest: +SKIP
         ISO: 2001-02-02 14:02:50.554, JD: 2451943.08531
         """
-        return self.target_rise_time(time, self.get_body('sun', time), which, horizon,
+        return self.target_rise_time(time, self.get_body("sun", time), which, horizon,
                                      n_grid_points=n_grid_points)
 
     @u.quantity_input(horizon=u.deg)
@@ -1491,7 +1491,7 @@ class Observer(object):
         >>> print("ISO: {0.iso}, JD: {0.jd}".format(sun_set)) # doctest: +SKIP
         ISO: 2001-02-04 00:35:42.102, JD: 2451944.52479
         """
-        return self.target_set_time(time, self.get_body('sun', time), which, horizon,
+        return self.target_set_time(time, self.get_body("sun", time), which, horizon,
                                     n_grid_points=n_grid_points)
 
     def noon(self, time, which='nearest', n_grid_points=150):
@@ -1520,7 +1520,7 @@ class Observer(object):
         `~astropy.time.Time`
             Time at solar noon
         """
-        return self.target_meridian_transit_time(time, self.get_body('sun', time), which,
+        return self.target_meridian_transit_time(time, self.get_body("sun", time), which,
                                                  n_grid_points=n_grid_points)
 
     def midnight(self, time, which='nearest', n_grid_points=150):
@@ -1549,7 +1549,7 @@ class Observer(object):
         `~astropy.time.Time`
             Time at solar midnight
         """
-        return self.target_meridian_antitransit_time(time, self.get_body('sun', time), which,
+        return self.target_meridian_antitransit_time(time, self.get_body("sun", time), which,
                                                      n_grid_points=n_grid_points)
 
     # Twilight convenience functions
@@ -1935,7 +1935,7 @@ class Observer(object):
         if not isinstance(time, Time):
             time = Time(time)
 
-        sun = self.get_body('sun', time)
+        sun = self.get_body("sun", time)
         return self.altaz(time, sun)
 
     @u.quantity_input(horizon=u.deg)
@@ -2045,7 +2045,7 @@ class Observer(object):
         if not isinstance(time, Time):
             time = Time(time)
 
-        solar_altitude = self.altaz(time, target=self.get_body('sun', time), obswl=obswl).alt
+        solar_altitude = self.altaz(time, target=self.get_body("sun", time), obswl=obswl).alt
 
         if solar_altitude.isscalar:
             return bool(solar_altitude < horizon)

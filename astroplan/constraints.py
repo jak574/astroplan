@@ -423,7 +423,7 @@ class AtNightConstraint(Constraint):
         if not hasattr(observer, '_altaz_cache'):
             observer._altaz_cache = {}
 
-        aakey = _make_cache_key(times, 'sun')
+        aakey = _make_cache_key(times, "sun")
 
         if aakey not in observer._altaz_cache:
             try:
@@ -432,7 +432,7 @@ class AtNightConstraint(Constraint):
                     observer.pressure = 0
 
                 # find solar altitude at these times
-                altaz = observer.altaz(times, observer.get_body('sun', times))
+                altaz = observer.altaz(times, observer.get_body("sun", times))
                 altitude = altaz.alt
                 # cache the altitude
                 observer._altaz_cache[aakey] = dict(times=times,
@@ -510,7 +510,7 @@ class SunSeparationConstraint(Constraint):
         # centred frame, so the separation is as-seen
         # by the observer.
         # 'get_sun' returns ICRS coords.
-        sun = observer.get_body('sun', times)
+        sun = observer.get_body("sun", times)
         targets = get_skycoord(targets)
         solar_separation = sun.separation(targets)
 
