@@ -50,7 +50,7 @@ def _make_cache_key(times, targets):
     """
     # make a tuple from times
     try:
-        timekey = tuple(times.jd) + times.shape
+        timekey = tuple(times.ravel().jd) + times.shape
     except BaseException:        # must be scalar
         timekey = (times.jd,)
     # make hashable thing from targets coords
